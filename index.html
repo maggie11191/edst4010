@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance Choice Hub · Year 11 Business Studies</title>
+<style>
+/* COLOURS: black + navy ONLY. FONT: headings large; all else one size. */
+:root{
+  --navy:#1a3a5c;
+  --navy-deep:#11283f;
+  --navy-wash:#eef2f6;
+  --navy-line:#c9d5e0;
+  --ink:#111111;
+  --bg:#ffffff;
+  --line:#d8dee4;
+  --radius:12px;
+  --maxw:900px;
+  --text:17px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.6;font-size:var(--text);}
+
+.topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand{margin-right:auto;font-weight:800;color:var(--navy);font-size:var(--text);}
+nav{display:flex;gap:2px;flex-wrap:wrap;}
+.navlink{border:none;background:none;cursor:pointer;font:inherit;font-size:var(--text);font-weight:600;color:var(--navy);padding:7px 12px;border-radius:7px;transition:.15s;}
+.navlink:hover{background:var(--navy-wash);}
+.navlink.active{background:var(--navy);color:#fff;}
+.navlink:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
+
+main{max-width:var(--maxw);margin:0 auto;padding:64px 20px 96px;}
+.page{display:none;}
+.page.show{display:block;}
+
+.eyebrow{display:inline-block;font-size:var(--text);font-weight:700;color:var(--navy);margin-bottom:10px;}
+h1{font-size:34px;line-height:1.2;margin:0 0 16px;font-weight:800;color:var(--ink);}
+h2{font-size:24px;line-height:1.25;margin:44px 0 12px;font-weight:800;color:var(--ink);}
+h3{font-size:var(--text);margin:20px 0 6px;font-weight:800;color:var(--ink);}
+p{margin:0 0 14px;font-size:var(--text);}
+.lead{font-size:var(--text);color:var(--ink);max-width:64ch;}
+.intent{margin:18px 0 6px;font-size:var(--text);color:var(--ink);}
+.intent-list{margin:0;padding-left:22px;max-width:64ch;}
+.intent-list li{margin-bottom:5px;}
+.criteria{margin-top:22px;background:var(--navy-wash);border-radius:var(--radius);padding:18px 22px;}
+.criteria-head{margin:0 0 8px;font-size:var(--text);color:var(--ink);}
+.criteria-list{margin:0;padding-left:22px;max-width:64ch;}
+.criteria-list li{margin-bottom:5px;}
+
+.hero{border:1px solid var(--line);border-left:5px solid var(--navy);border-radius:var(--radius);padding:34px 32px;}
+
+.btn{border:none;cursor:pointer;font:inherit;font-size:var(--text);font-weight:700;padding:11px 20px;border-radius:9px;}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy-deep);}
+.btn:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
+
+/* Steps: all white, label:title on one line */
+.steps{margin-top:28px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.step{display:flex;gap:14px;align-items:flex-start;padding:20px 20px;border-bottom:1px solid var(--line);cursor:pointer;background:#fff;text-align:left;width:100%;font:inherit;border-top:0;border-left:0;border-right:0;}
+.step:last-child{border-bottom:none;}
+.step:focus-visible{outline:2px solid var(--navy);outline-offset:-2px;}
+.step-num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:var(--text);display:flex;align-items:center;justify-content:center;}
+.step-body{flex:1;font-size:var(--text);}
+.step-head{font-weight:800;color:var(--ink);margin-bottom:2px;}
+.step-desc{color:var(--ink);display:block;}
+
+.note{font-size:var(--text);color:#fff;background:var(--navy);border-radius:10px;padding:14px 18px;margin:22px 0 0;}
+
+.soon{border:2px dashed var(--navy-line);border-radius:var(--radius);padding:32px;text-align:center;color:var(--ink);}
+
+/* ---- Foundations: flow map (tree) ---- */
+.tree{border:1px solid var(--line);border-radius:var(--radius);padding:26px 20px;margin-top:8px;}
+.tree-root{text-align:center;font-weight:800;color:#fff;background:var(--navy);border-radius:8px;padding:11px;max-width:260px;margin:0 auto;}
+.tree-line-down{width:2px;height:20px;background:var(--navy-line);margin:0 auto;}
+.tree-line-down.short{height:14px;}
+.tree-split{display:grid;grid-template-columns:1fr 1fr;gap:20px;position:relative;}
+.tree-col{border:1px solid var(--navy-line);border-radius:10px;padding:14px;}
+.tree-node{font-weight:800;color:var(--ink);text-align:center;}
+.tree-node span{display:block;font-weight:400;color:var(--ink);margin-top:4px;}
+.tree-subsplit{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tree-subsplit.one{grid-template-columns:1fr;}
+.tree-branch{display:grid;grid-template-columns:1fr 1fr;height:14px;margin:0 auto;width:calc(100% - 25%);}
+.tree-branch.top{width:50%;height:18px;}
+.tree-branch span{position:relative;}
+.tree-branch span::before{content:"";position:absolute;top:0;left:50%;width:50%;height:2px;background:var(--navy-line);}
+.tree-branch span:last-child::before{left:0;}
+.tree-branch span::after{content:"";position:absolute;top:0;left:50%;width:2px;height:14px;background:var(--navy-line);}
+.tree-branch.top span::after{height:18px;}
+.tree-leaf{background:var(--navy-wash);border-radius:8px;padding:14px 12px;text-align:center;display:flex;flex-direction:column;justify-content:center;}
+.leaf-cat{font-weight:800;color:var(--ink);margin-bottom:4px;}
+.leaf-list{line-height:1.7;}
+
+/* ---- Foundations: accordions ---- */
+.acc-list{margin-top:8px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.acc{border-bottom:1px solid var(--line);}
+.acc:last-child{border-bottom:none;}
+.acc-head{width:100%;display:flex;align-items:center;gap:12px;background:#fff;border:none;cursor:pointer;font:inherit;font-size:var(--text);padding:15px 18px;text-align:left;}
+.acc-head:hover{background:var(--navy-wash);}
+.acc-head:focus-visible{outline:2px solid var(--navy);outline-offset:-2px;}
+.acc-name{font-weight:800;color:var(--ink);margin-right:auto;}
+.acc-tag{color:var(--ink);font-weight:600;}
+.acc-sign{font-weight:800;color:var(--navy);width:20px;text-align:center;}
+.acc-body{display:none;padding:4px 18px 18px;}
+.acc.open .acc-body{display:block;}
+.acc-body p{margin:10px 0;}
+.acc-body .kidea{color:var(--navy);}
+
+/* new accordion layout */
+.acc-body .row{display:flex;gap:14px;margin:0 0 10px;align-items:baseline;background:var(--navy-wash);border-radius:10px;padding:12px 16px;}
+.acc-body .rowlab{flex:none;width:110px;font-weight:800;color:var(--navy);}
+.acc-body .rowval{flex:1;}
+.acc-body .pros{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+.acc-body .pro,.acc-body .con{background:var(--navy-wash);border-radius:10px;padding:14px 16px;}
+.acc-body .prohead,.acc-body .conhead{font-weight:800;color:var(--navy);margin-bottom:6px;}
+.acc-body .pro ul,.acc-body .con ul{margin:0;padding-left:18px;}
+.acc-body .pro li,.acc-body .con li{margin-bottom:5px;}
+.acc-body .pro li::marker{content:"\2713  ";}
+.acc-body .con li::marker{content:"\2717  ";}
+.acc-body ul.sub{margin:6px 0 0;padding-left:22px;}
+.acc-body ul.sub li{margin-bottom:6px;color:var(--ink);}
+.acc-body ul.sub li b{color:var(--navy);}
+.video{margin:14px 0;}
+.video-label{color:var(--ink);margin:0 0 8px;}
+.video-frame{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+.video-frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+.acc-body a{color:var(--navy);font-weight:700;}
+.video-link{margin:8px 0 0;}
+.video-link a{color:var(--navy);font-weight:700;}
+.pros{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;}
+.pros ul{margin:4px 0 0;padding-left:18px;}
+.pros li{margin-bottom:5px;}
+
+.pagenav{margin-top:32px;}
+.btn-primary[data-page]{display:inline-block;}
+
+
+/* ---- Check Understanding quiz ---- */
+.quiz{margin-top:8px;}
+.q{border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:16px;}
+.qnum{font-weight:800;color:var(--ink);margin:0 0 6px;}
+.qtext{margin:0 0 14px;font-weight:600;}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:var(--text);background:#fff;border:1.5px solid var(--navy-line);border-radius:9px;padding:11px 15px;margin-bottom:9px;cursor:pointer;transition:.12s;}
+.opt:hover{background:var(--navy-wash);}
+.opt:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
+.opt.correct{background:var(--navy);color:#fff;border-color:var(--navy);}
+.opt.wrong{background:#fff;border-color:var(--navy);opacity:.5;text-decoration:line-through;}
+.opt.locked{cursor:default;}
+.fb{display:none;margin:6px 0 0;padding:12px 15px;border-radius:9px;background:var(--navy-wash);color:var(--navy);font-weight:600;}
+.q.right .fb{display:block;}
+.q.hint .fb{display:block;}
+
+
+/* ---- Finance Advisor (Fin) ---- */
+.scen-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 20px;}
+.scen-tab{font:inherit;font-size:var(--text);font-weight:700;border:1.5px solid var(--navy-line);background:#fff;color:var(--navy);border-radius:9px;padding:9px 16px;cursor:pointer;}
+.scen-tab:hover{background:var(--navy-wash);}
+.scen-tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.scen-tab:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
+.chat{border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-height:200px;}
+.scen-intro{background:var(--navy-wash);border-radius:10px;padding:16px 18px;margin-bottom:18px;}
+.scen-intro .scen-title{font-weight:800;color:var(--navy);margin-bottom:6px;}
+.bubble{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start;}
+.bubble .who{flex:none;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.bubble .say{flex:1;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+.bubble.you .say{background:var(--navy-wash);border-color:var(--navy-line);}
+.fin-opts{display:flex;flex-direction:column;gap:9px;margin:10px 0 4px;}
+.fin-opt{font:inherit;font-size:var(--text);text-align:left;background:#fff;border:1.5px solid var(--navy-line);border-radius:9px;padding:11px 15px;cursor:pointer;}
+.fin-opt:hover{background:var(--navy-wash);}
+.fin-opt:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
+.fin-opt:disabled{opacity:.45;cursor:default;}
+.fin-input{width:100%;font:inherit;font-size:var(--text);border:1.5px solid var(--navy-line);border-radius:9px;padding:11px 14px;min-height:80px;resize:vertical;margin:4px 0 8px;}
+.fin-restart{font:inherit;font-size:var(--text);font-weight:700;background:none;border:none;color:var(--navy);cursor:pointer;text-decoration:underline;padding:0;margin-top:6px;}
+.scen-done{background:var(--navy-wash);border-radius:10px;padding:14px 18px;font-weight:600;color:var(--navy);margin-top:8px;}
+
+
+/* ---- Exit Ticket ---- */
+.exit-q{margin-bottom:18px;}
+.exit-q label{display:block;font-weight:600;margin-bottom:8px;}
+.exit-done{background:var(--navy-wash);border-radius:var(--radius);padding:20px 22px;font-weight:600;color:var(--navy);}
+
+footer{border-top:1px solid var(--line);background:#fff;}
+.foot-inner{max-width:var(--maxw);margin:0 auto;padding:20px;font-size:var(--text);color:var(--ink);}
+
+@media(max-width:600px){h1{font-size:28px;}.hero{padding:26px 20px;}main{padding:30px 16px 72px;}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Finance Choice Hub</span>
+    <nav aria-label="Main sections">
+      <button class="navlink active" data-page="home">Home</button>
+      <button class="navlink" data-page="foundations">Consolidate</button>
+      <button class="navlink" data-page="check">Practise</button>
+      <button class="navlink" data-page="advisor">Apply</button>
+      <button class="navlink" data-page="exit">Exit Ticket</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section class="page show" id="home">
+  <div class="hero">
+    <h1>Finance Choice Hub</h1>
+    <p class="lead">You have already met sources of finance in class. This hub is where you put that knowledge to work, choosing the right source for a business and explaining why.</p>
+  </div>
+
+  <h2>How this hub works</h2>
+  <p class="lead">Four steps, in order. Work through them at your own pace.</p>
+
+  <div class="steps">
+    <button class="step" data-page="foundations">
+      <span class="step-num">1</span>
+      <span class="step-body">
+        <span class="step-head">Consolidate</span>
+        <span class="step-desc">The big picture: debt and equity, short-term and long-term, and each source on one map.</span>
+      </span>
+    </button>
+    <button class="step" data-page="check">
+      <span class="step-num">2</span>
+      <span class="step-body">
+        <span class="step-head">Practise</span>
+        <span class="step-desc">A set of multiple-choice questions with instant feedback.</span>
+      </span>
+    </button>
+    <button class="step" data-page="advisor">
+      <span class="step-num">3</span>
+      <span class="step-body">
+        <span class="step-head">Apply</span>
+        <span class="step-desc">Work through business scenarios. Fin asks the questions, and you make the decision.</span>
+      </span>
+    </button>
+    <button class="step" data-page="exit">
+      <span class="step-num">4</span>
+      <span class="step-body">
+        <span class="step-head">Reflect</span>
+        <span class="step-desc">A quick reflection to capture what you are sure about and what you would like to revisit.</span>
+      </span>
+    </button>
+  </div>
+</section>
+
+<!-- FOUNDATIONS -->
+<section class="page" id="foundations">
+  <h2>The big picture</h2>
+  <p>Sort any source by where the money comes from and for how long.</p>
+
+  <!-- FLOW MAP (tree) -->
+  <div class="tree">
+    <div class="tree-root">Sources of Finance</div>
+    <div class="tree-line-down"></div>
+    <div class="tree-branch top"><span></span><span></span></div>
+    <div class="tree-split">
+      <!-- DEBT -->
+      <div class="tree-col">
+        <div class="tree-node">Debt<span>Money you <b>owe</b>, borrowed and repaid.</span></div>
+        <div class="tree-line-down short"></div>
+        <div class="tree-branch"><span></span><span></span></div>
+        <div class="tree-subsplit">
+          <div class="tree-leaf">
+            <div class="leaf-cat">Short-term</div>
+            <div class="leaf-list">Overdraft<br>Factoring</div>
+          </div>
+          <div class="tree-leaf">
+            <div class="leaf-cat">Long-term</div>
+            <div class="leaf-list">Mortgage<br>Leasing</div>
+          </div>
+        </div>
+      </div>
+      <!-- EQUITY -->
+      <div class="tree-col">
+        <div class="tree-node">Equity<span>Money you <b>own</b>, not repaid.</span></div>
+        <div class="tree-line-down short"></div>
+        <div class="tree-branch"><span></span><span></span></div>
+        <div class="tree-subsplit">
+          <div class="tree-leaf">
+            <div class="leaf-cat">Retained profits</div>
+          </div>
+          <div class="tree-leaf">
+            <div class="leaf-cat">Shares</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Explore each source</h2>
+
+  <div class="acc-list">
+
+    <!-- 1 Overdraft -->
+    <div class="acc">
+      <button class="acc-head" aria-expanded="false">
+        <span class="acc-name">Overdraft</span>
+        <span class="acc-tag">Debt · Short-term</span>
+        <span class="acc-sign">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="row"><span class="rowlab">Definition</span><span class="rowval">An overdraft allows a business to temporarily spend more money than it has in its bank account, up to an agreed limit.</span></div>
+        <div class="row"><span class="rowlab">Used for</span><span class="rowval">Very short-term needs, usually a few days or a few weeks.</span></div>
+        <div class="row"><span class="rowlab">Example</span><span class="rowval">The business has no money in its account, but the overdraft lets it go negative to pay wages to staff.</span></div>
+        <div class="pros">
+          <div class="pro"><div class="prohead">Advantages</div><ul><li>Quick and flexible, only used when needed.</li></ul></div>
+          <div class="con"><div class="conhead">Disadvantages</div><ul><li>The interest rate is usually high.</li><li>The bank can cancel the limit at short notice.</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 Factoring -->
+    <div class="acc">
+      <button class="acc-head" aria-expanded="false">
+        <span class="acc-name">Factoring</span>
+        <span class="acc-tag">Debt · Short-term</span>
+        <span class="acc-sign">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="row"><span class="rowlab">Definition</span><span class="rowval">The selling of accounts receivable for a discounted price to a factoring company.</span></div>
+        <div class="row"><span class="rowlab">Accounts receivable</span><span class="rowval">Money your customers owe you for goods or services they have not paid for yet.</span></div>
+        <div class="row"><span class="rowlab">Video</span><span class="rowval">A short, visual explainer covering what factoring is, how it works step by step, and why it matters. Captions and transcript included. <a href="https://youtu.be/KDrKueQNWGk" target="_blank" rel="noopener">Watch on YouTube &#8599;</a></span></div>
+        <div class="pros">
+          <div class="pro"><div class="prohead">Advantages</div><ul><li>Improves cash flow quickly.</li></ul></div>
+          <div class="con"><div class="conhead">Disadvantages</div><ul><li>Receives less than the full invoice value.</li><li>Heavy reliance can signal cash-flow problems.</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 Mortgage -->
+    <div class="acc">
+      <button class="acc-head" aria-expanded="false">
+        <span class="acc-name">Mortgage</span>
+        <span class="acc-tag">Debt · Long-term</span>
+        <span class="acc-sign">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="row"><span class="rowlab">Definition</span><span class="rowval">A loan secured by the property of the borrower or business.</span></div>
+        <div class="row"><span class="rowlab">Secured</span><span class="rowval">The lender has something valuable to rely on if the borrower cannot repay. This is something the business already owns, for example a building or land.</span></div>
+        <div class="row"><span class="rowlab">Used for</span><span class="rowval">Large, long-term purchases such as land or property, repaid over many years, with regular payments that cover both the loan and the interest.</span></div>
+        <div class="pros">
+          <div class="pro"><div class="prohead">Advantages</div><ul><li>Spreads a large cost over a long period.</li><li>Lower interest rates than most short-term debt.</li></ul></div>
+          <div class="con"><div class="conhead">Disadvantages</div><ul><li>The property can be lost if repayments are not met.</li><li>If the interest rate goes up, the repayments go up too.</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Leasing -->
+    <div class="acc">
+      <button class="acc-head" aria-expanded="false">
+        <span class="acc-name">Leasing</span>
+        <span class="acc-tag">Debt · Long-term</span>
+        <span class="acc-sign">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="row"><span class="rowlab">Definition</span><span class="rowval">A long-term source of debt finance where a business pays to use an asset for an agreed period of time instead of buying it outright.</span></div>
+        <div class="row"><span class="rowlab">Why lease?</span><span class="rowval">Some assets are very expensive to buy outright, for example machinery or a building.</span></div>
+        <div class="row"><span class="rowlab">Example</span><span class="rowval">A car-hire business leases its cars instead of buying them, making regular lease payments.</span></div>
+        <div class="pros">
+          <div class="pro"><div class="prohead">Advantages</div><ul><li>No large payment upfront.</li><li>Can upgrade to newer equipment whenever the lease ends.</li><li>The business does not carry the risk of the asset losing value over time.</li></ul></div>
+          <div class="con"><div class="conhead">Disadvantages</div><ul><li>The business never owns the asset.</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Retained profits -->
+    <div class="acc">
+      <button class="acc-head" aria-expanded="false">
+        <span class="acc-name">Retained profits</span>
+        <span class="acc-tag">Equity</span>
+        <span class="acc-sign">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="row"><span class="rowlab">Definition</span><span class="rowval">Profits kept inside the business after expenses, tax and any dividends have been paid.</span></div>
+        <div class="row"><span class="rowlab">Key idea</span><span class="rowval">A business can choose how much profit to keep and reinvest, so it is flexible.</span></div>
+        <div class="row"><span class="rowlab">Example</span><span class="rowval">A business keeps part of last year's profit and uses it to open a second store, rather than borrowing the money.</span></div>
+        <div class="pros">
+          <div class="pro"><div class="prohead">Advantages</div><ul><li>No interest and no repayments.</li><li>No loss of ownership or control.</li></ul></div>
+          <div class="con"><div class="conhead">Disadvantages</div><ul><li>Only available if the business is profitable.</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Shares -->
+    <div class="acc">
+      <button class="acc-head" aria-expanded="false">
+        <span class="acc-name">Shares</span>
+        <span class="acc-tag">Equity</span>
+        <span class="acc-sign">+</span>
+      </button>
+      <div class="acc-body">
+        <div class="row"><span class="rowlab">Definition</span><span class="rowval">Shares are small parts of ownership in a company. A company can raise finance by selling shares to investors.</span></div>
+        <div class="row"><span class="rowlab">Ownership</span><span class="rowval">Owning part of the company, which can include a say in decisions and a share of the profits.</span></div>
+        <div class="row"><span class="rowlab">Important</span><span class="rowval">Sole traders and partnerships cannot issue shares. Only companies can:
+          <ul class="sub"><li><b>Private companies</b> (Pty Ltd) can have shares, but cannot sell them to the general public.</li><li><b>Public companies</b> can sell shares to the public, for example on the ASX (the Australian stock exchange).</li></ul></span></div>
+        <div class="pros">
+          <div class="pro"><div class="prohead">Advantages</div><ul><li>No repayment and no interest.</li><li>Can raise large amounts for growth.</li></ul></div>
+          <div class="con"><div class="conhead">Disadvantages</div><ul><li>Ownership and control are shared with others.</li><li>Dividends may have to be paid to shareholders out of profits.</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pagenav">
+    <button class="btn btn-primary" data-page="check">Next: Practise</button>
+  </div>
+</section>
+
+<!-- CHECK -->
+<section class="page" id="check">
+  <h1>Practise</h1>
+  <p class="lead">A few questions to practise with. If one trips you up, you will get a hint and can try again.</p>
+
+  <div class="quiz">
+
+    <div class="q" data-answer="B">
+      <p class="qnum">Question 1</p>
+      <p class="qtext">Equity finance is money that:</p>
+      <button class="opt" data-opt="A">must be repaid with interest</button>
+      <button class="opt" data-opt="B">the business owns and does not repay</button>
+      <button class="opt" data-opt="C">is borrowed from a bank</button>
+      <button class="opt" data-opt="D">comes from selling invoices</button>
+      <p class="fb" data-hint="Think about the difference between money you owe and money you own.">Correct. Equity is money the business owns, with no repayment.</p>
+    </div>
+
+    <div class="q" data-answer="B">
+      <p class="qnum">Question 2</p>
+      <p class="qtext">Which source of finance is used for very short-term needs, usually a few days or weeks?</p>
+      <button class="opt" data-opt="A">Mortgage</button>
+      <button class="opt" data-opt="B">Overdraft</button>
+      <button class="opt" data-opt="C">Leasing</button>
+      <button class="opt" data-opt="D">Shares</button>
+      <p class="fb" data-hint="Which option is only meant for very short gaps, not years?">Correct. An overdraft covers very short-term cash needs of days or weeks.</p>
+    </div>
+
+    <div class="q" data-answer="C">
+      <p class="qnum">Question 3</p>
+      <p class="qtext">A medical business wants to use an expensive piece of medical equipment but cannot afford to buy it outright. Which source fits best?</p>
+      <button class="opt" data-opt="A">Mortgage</button>
+      <button class="opt" data-opt="B">Shares</button>
+      <button class="opt" data-opt="C">Leasing</button>
+      <button class="opt" data-opt="D">Factoring</button>
+      <p class="fb" data-hint="Which option lets a business use an asset through regular payments, without buying it?">Correct. Leasing lets the business use the equipment through regular payments, without buying it.</p>
+    </div>
+
+    <div class="q" data-answer="A">
+      <p class="qnum">Question 4</p>
+      <p class="qtext">A business is owed $10,000 by a customer in 60 days but needs cash now. Which source fits best?</p>
+      <button class="opt" data-opt="A">Factoring</button>
+      <button class="opt" data-opt="B">Mortgage</button>
+      <button class="opt" data-opt="C">Retained profits</button>
+      <button class="opt" data-opt="D">Overdraft</button>
+      <p class="fb" data-hint="Which option turns money customers already owe into cash now?">Correct. Factoring turns unpaid invoices into cash straight away.</p>
+    </div>
+
+    <div class="q" data-answer="B">
+      <p class="qnum">Question 5</p>
+      <p class="qtext">A sole trader wants to raise finance. Which option is NOT available to them?</p>
+      <button class="opt" data-opt="A">Overdraft</button>
+      <button class="opt" data-opt="B">Shares</button>
+      <button class="opt" data-opt="C">Retained profits</button>
+      <button class="opt" data-opt="D">Leasing</button>
+      <p class="fb" data-hint="Which option can only be used by companies, not by a sole trader?">Correct. Only companies can issue shares, so a sole trader cannot.</p>
+    </div>
+
+    <div class="q" data-answer="C">
+      <p class="qnum">Question 6</p>
+      <p class="qtext">A business wants to fund long-term growth without taking on repayments or interest. Which source fits best?</p>
+      <button class="opt" data-opt="A">Overdraft</button>
+      <button class="opt" data-opt="B">Mortgage</button>
+      <button class="opt" data-opt="C">Retained profits</button>
+      <button class="opt" data-opt="D">Factoring</button>
+      <p class="fb" data-hint="Which option uses the business's own money, so there is nothing to repay?">Correct. Retained profits use the business's own money, with no interest or repayments.</p>
+    </div>
+
+  </div>
+
+  <div class="pagenav">
+    <button class="btn btn-primary" data-page="advisor">Next: Apply</button>
+  </div>
+</section>
+
+<!-- ADVISOR -->
+<section class="page" id="advisor">
+  <h1>Apply</h1>
+  <p class="lead">Meet Fin, your finance coach. Fin asks questions one step at a time and guides you to a decision you can explain.</p>
+
+  <div class="scen-tabs" id="scenTabs"></div>
+  <div class="chat" id="chat"></div>
+
+  <div class="pagenav">
+    <button class="btn btn-primary" data-page="exit">Next: Exit Ticket</button>
+  </div>
+</section>
+
+<!-- EXIT -->
+<section class="page" id="exit">
+  <h1>Exit Ticket</h1>
+  <p class="lead">A short reflection to finish. There are no right answers, just your own thinking.</p>
+
+  <div class="exit-form" id="exitForm">
+    <div class="exit-q">
+      <label>1. Before today, what was confusing about sources of finance, and did this hub help with it?</label>
+      <textarea class="fin-input" rows="3"></textarea>
+    </div>
+    <div class="exit-q">
+      <label>2. Which of Fin's questions made you stop and think the most?</label>
+      <textarea class="fin-input" rows="3"></textarea>
+    </div>
+    <div class="exit-q">
+      <label>3. Did the Consolidate page help you understand each source clearly? Is there anything that could be clearer?</label>
+      <textarea class="fin-input" rows="3"></textarea>
+    </div>
+    <button class="btn btn-primary" id="exitSubmit">Submit reflection</button>
+  </div>
+  <div class="exit-done" id="exitDone" style="display:none;">That's a great way to lock in what you have learned today. Well done for working through the whole hub.</div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  const pages=document.querySelectorAll('.page');
+  const links=document.querySelectorAll('.navlink');
+  function show(id){
+    pages.forEach(p=>p.classList.toggle('show',p.id===id));
+    links.forEach(l=>l.classList.toggle('active',l.dataset.page===id));
+    window.scrollTo({top:0});
+  }
+  document.body.addEventListener('click',e=>{
+    const t=e.target.closest('[data-page]');
+    if(t)show(t.dataset.page);
+  });
+
+  // accordions
+  document.querySelectorAll('.acc-head').forEach(head=>{
+    head.addEventListener('click',()=>{
+      const acc=head.parentElement;
+      const open=acc.classList.toggle('open');
+      head.setAttribute('aria-expanded',open?'true':'false');
+      head.querySelector('.acc-sign').textContent=open?'\u2212':'+';
+    });
+  });
+
+  // quiz: guided retry feedback
+  document.querySelectorAll(".q").forEach(function(q){
+    var answer=q.dataset.answer;
+    var fb=q.querySelector(".fb");
+    var hint=fb.dataset.hint;
+    var fullText=fb.textContent;
+    var attempted=false;
+    q.querySelectorAll(".opt").forEach(function(opt){
+      opt.addEventListener("click",function(){
+        if(q.classList.contains("right")) return;
+        var chosen=opt.dataset.opt;
+        if(chosen===answer){
+          opt.classList.add("correct");
+          q.classList.remove("hint");
+          q.classList.add("right");
+          q.querySelectorAll(".opt").forEach(function(o){o.classList.add("locked");});
+          if(attempted){ fb.textContent=fullText; }
+          else { fb.textContent="Well done, that is correct."; }
+        } else {
+          attempted=true;
+          opt.classList.add("wrong","locked");
+          q.classList.add("hint");
+          fb.textContent="Almost. Hint: "+hint+" Have another go.";
+        }
+      });
+    });
+  });
+
+  // exit ticket submit
+  var es=document.getElementById('exitSubmit');
+  if(es){es.addEventListener('click',function(){document.getElementById('exitForm').style.display='none';document.getElementById('exitDone').style.display='block';document.getElementById('exitDone').scrollIntoView({block:'nearest'});});}
+})();
+
+  /* ============ Finance Advisor (Fin) engine ============ */
+  var SCENARIOS = {
+    s1: {
+      tab: "Scenario 1 \u00b7 Guided",
+      title: "Scenario 1 \u00b7 Guided",
+      intro: "Sam runs a small caf\u00e9 as a <b>sole trader</b>. The business is profitable, but this is a quiet month, so there is not much money in the account right now. In <b>two weeks</b> he needs to pay his staff their wages (<b>$3,000</b>), and the account will be a little short until business picks up again.",
+      steps: [
+        {
+          ask: "Let's work this out together. First: does Sam need money he will pay back (debt), or money from ownership that he does not repay (equity)?",
+          opts: [
+            {t:"Debt", ok:true, say:"Right. Sam just needs to cover a short gap and will repay it soon, so this is debt."},
+            {t:"Equity", ok:false, hint:"Equity means giving away part of the business for money you never repay. Sam only needs to cover a small, short gap. Does it make sense to give away ownership of his caf\u00e9 for that?"}
+          ]
+        },
+        {
+          ask: "Good. Now, is this a short-term need or a long-term need?",
+          opts: [
+            {t:"Short-term", ok:true, say:"Exactly. It is only about two weeks until business picks up, so it is short-term."},
+            {t:"Long-term", ok:false, hint:"Look at the timeframe again. Sam only needs to bridge about two weeks. Is that short-term or long-term?"}
+          ]
+        },
+        {
+          ask: "So we need a short-term debt option. Which source would you recommend for Sam?",
+          opts: [
+            {t:"Overdraft", ok:true, say:"Great choice. An overdraft lets Sam's account go a little negative to pay wages now, then he repays it when business picks up."},
+            {t:"Mortgage", ok:false, hint:"A mortgage is a large loan for buying property over many years. Sam just needs $3,000 for two weeks. Is that the right fit?"},
+            {t:"Shares", ok:false, hint:"Remember, Sam is a sole trader, so he cannot issue shares. And he would not give away ownership for a two-week gap anyway."},
+            {t:"Factoring", ok:false, hint:"Factoring works when customers owe you money on invoices. Nothing here says Sam is waiting on customer invoices, so this is not the best fit."}
+          ]
+        },
+        {
+          type:"advantage",
+          ask: "Now let's justify it. Which of these is a real <b>advantage</b> of an overdraft for Sam?",
+          opts: [
+            {t:"He only pays interest on the amount he actually uses", ok:true, say:"Yes. That is a key advantage of an overdraft."},
+            {t:"He never has to pay it back", ok:false, hint:"An overdraft is still borrowed money. It does have to be repaid."},
+            {t:"It gives investors part-ownership of the caf\u00e9", ok:false, hint:"That describes shares, not an overdraft."}
+          ]
+        },
+        {
+          type:"disadvantage",
+          ask: "And which of these is a real <b>disadvantage</b> Sam should keep in mind?",
+          opts: [
+            {t:"The interest rate is usually high", ok:true, say:"Correct. Overdrafts are convenient, but the interest rate is usually high."},
+            {t:"He loses control of his business", ok:false, hint:"That is a risk of selling shares, not of an overdraft."},
+            {t:"He has to repay it over many years", ok:false, hint:"That describes a long-term loan like a mortgage. An overdraft is short-term."}
+          ]
+        }
+      ],
+      done: "Nicely done. You worked through the whole decision: debt, short-term, then overdraft, and you justified it. That is exactly the thinking exam questions ask for."
+    },
+    s2: {
+      tab: "Scenario 2",
+      title: "Scenario 2",
+      intro: "A growing company wants to buy its own building instead of renting. It needs a large amount of money and is happy to repay it gradually over many years. The company can offer the building itself as security.",
+      steps: [
+        {
+          ask: "This time, you decide first. Which source would you recommend to this company?",
+          opts: [
+            {t:"Mortgage", ok:true, say:"Strong choice. A mortgage is a long-term loan used to buy property, with the property held as security. That fits this company exactly."},
+            {t:"Overdraft", ok:false, hint:"An overdraft is for very short gaps of days or weeks. This company needs a large sum for many years. Is that short-term or long-term?"},
+            {t:"Factoring", ok:false, hint:"Factoring turns unpaid customer invoices into cash. This company is buying a building, not waiting on invoices."},
+            {t:"Retained profits", ok:false, hint:"Retained profits are the company's own saved profit. Buying a whole building is usually far too large for that, and the company is happy to borrow."}
+          ]
+        },
+        {
+          type:"advantage",
+          ask: "Good. Now justify it. Which of these is a real <b>advantage</b> of a mortgage here?",
+          opts: [
+            {t:"It spreads a large cost over a long period", ok:true, say:"Yes. That is the main advantage of a mortgage for a big purchase like this."},
+            {t:"The company never has to repay it", ok:false, hint:"A mortgage is borrowed money, so it must be repaid."},
+            {t:"It avoids giving up any control", ok:false, hint:"That is true of most debt, but it is not the key advantage of a mortgage for a large, long-term purchase. Think about the size and timeframe of the cost."}
+          ]
+        },
+        {
+          type:"disadvantage",
+          ask: "And which of these is a real <b>disadvantage</b> the company should keep in mind?",
+          opts: [
+            {t:"The building can be lost if repayments are not met", ok:true, say:"Correct. Because the building is the security, the lender can take it if the company cannot repay."},
+            {t:"It gives investors part-ownership", ok:false, hint:"That describes shares, not a mortgage."},
+            {t:"It can only be used for a few weeks", ok:false, hint:"That describes an overdraft. A mortgage is long-term."}
+          ]
+        }
+      ],
+      done: "Well reasoned. You recommended a mortgage and backed it up with a clear advantage and a real risk. That is what a strong recommendation looks like."
+    },
+    s3: {
+      tab: "Scenario 3",
+      title: "Scenario 3",
+      intro: "A company has just had a very profitable year. It wants to buy new equipment to expand, and would prefer not to borrow or pay any interest.",
+      steps: [
+        {
+          ask: "You decide first again. Which source would you recommend to this company?",
+          opts: [
+            {t:"Retained profits", ok:true, say:"Strong choice. The company just made good profit and does not want to borrow, so using its own retained profits fits perfectly."},
+            {t:"Mortgage", ok:false, hint:"A mortgage means borrowing and paying interest, but this company said it would prefer not to borrow. Is there a way to use its own money instead?"},
+            {t:"Overdraft", ok:false, hint:"An overdraft is also borrowing, with interest, and it is for short-term gaps. The company wants to avoid interest and is funding expansion."},
+            {t:"Factoring", ok:false, hint:"Factoring is about getting cash from unpaid invoices. Nothing here mentions invoices, and it does not match a profitable company funding its own growth."}
+          ]
+        },
+        {
+          type:"advantage",
+          ask: "Now discuss it. Which of these is a real <b>advantage</b> of using retained profits?",
+          opts: [
+            {t:"There is no interest and nothing to repay", ok:true, say:"Yes. Because it is the company's own money, there is no interest and no repayment."},
+            {t:"It raises the largest possible amount of money", ok:false, hint:"Retained profits are limited to what the company has actually saved, so this is not its strength."},
+            {t:"It brings in new investors", ok:false, hint:"That describes shares. Retained profits use money the company already has."}
+          ]
+        },
+        {
+          type:"disadvantage",
+          ask: "And which of these is a real <b>disadvantage</b> to keep in mind?",
+          opts: [
+            {t:"It is only available if the business is profitable", ok:true, say:"Correct. Retained profits depend on the business actually making a profit to keep."},
+            {t:"The company must pay high interest", ok:false, hint:"There is no interest on the company's own money. That would apply to borrowing."},
+            {t:"The bank can cancel it at any time", ok:false, hint:"That describes an overdraft. Retained profits are the company's own money."}
+          ]
+        }
+      ],
+      done: "Well discussed. You recommended retained profits and explained both why it fits and its main limit. That is balanced, exam-ready thinking."
+    },
+    s4: {
+      tab: "Scenario 4 \u00b7 Challenge",
+      title: "Scenario 4 \u00b7 Challenge",
+      intro: "A business runs as a sole trader. It has just won a big order and is waiting on $40,000 from customers, who will not pay for another 60 days. In the meantime it urgently needs cash to buy materials. The owner says, \"I'll just sell some shares to investors to raise the money quickly.\"",
+      steps: [
+        {
+          ask: "The owner wants to sell shares. Can this business actually do that?",
+          opts: [
+            {t:"No", ok:true, say:"Correct. Let's look at why."},
+            {t:"Yes", ok:false, hint:"Think about what type of business this is. Who is actually allowed to issue shares?"}
+          ]
+        },
+        {
+          ask: "Why can't this business sell shares at all?",
+          opts: [
+            {t:"Because it is a sole trader, and only companies can issue shares", ok:true, say:"Exactly. Only companies can issue shares, so a sole trader cannot."},
+            {t:"Because it does not have enough customers", ok:false, hint:"It's not about customers. It's about the type of business. Only one structure is allowed to issue shares."},
+            {t:"Because the amount is too small", ok:false, hint:"The amount isn't the issue. Think about the business structure: who is allowed to issue shares?"}
+          ]
+        },
+        {
+          ask: "So shares are off the table. The business is waiting on $40,000 from customers. Which source would actually suit this short-term gap?",
+          opts: [
+            {t:"Factoring", ok:true, say:"Exactly. It's waiting on unpaid invoices, and factoring turns those into cash now. That's the right fit for a short-term gap like this."},
+            {t:"Overdraft", ok:false, hint:"An overdraft could cover a short gap, but here there's a better-matched option. The business is owed $40,000 in invoices. Which source uses that directly?"},
+            {t:"Mortgage", ok:false, hint:"A mortgage is a long-term loan for buying property. This is a short-term cash gap."},
+            {t:"Retained profits", ok:false, hint:"Retained profits mean using the business's own saved profit, but here the cash is tied up in unpaid invoices. Which option turns those invoices into cash?"}
+          ]
+        }
+      ],
+      done: "Well worked through. You spotted that a sole trader can't issue shares, and you found the option that actually fits: factoring, which turns those unpaid invoices into cash. Reading a situation carefully like this, instead of taking the first idea, is exactly the thinking that top exam answers show."
+    }
+  };
+
+  /* render engine */
+  (function(){
+    var tabsEl = document.getElementById("scenTabs");
+    var chatEl = document.getElementById("chat");
+    if(!tabsEl || !chatEl) return;
+    var keys = Object.keys(SCENARIOS);
+    var current = keys[0];
+
+    keys.forEach(function(k){
+      var b=document.createElement("button");
+      b.className="scen-tab"+(k===current?" active":"");
+      b.textContent=SCENARIOS[k].tab;
+      b.onclick=function(){current=k;document.querySelectorAll(".scen-tab").forEach(function(t){t.classList.remove("active");});b.classList.add("active");startScenario(k);};
+      tabsEl.appendChild(b);
+    });
+
+    function bubble(who,html,you){
+      var d=document.createElement("div");
+      d.className="bubble"+(you?" you":"");
+      d.innerHTML='<div class="who">'+(you?"You":"Fin")+'</div><div class="say">'+html+'</div>';
+      chatEl.appendChild(d);
+      d.scrollIntoView({block:"nearest"});
+      return d;
+    }
+
+    function startScenario(k){
+      chatEl.innerHTML="";
+      var sc=SCENARIOS[k];
+      var intro=document.createElement("div");
+      intro.className="scen-intro";
+      intro.innerHTML='<div class="scen-title">'+sc.title+'</div>'+sc.intro;
+      chatEl.appendChild(intro);
+      runStep(sc,0);
+    }
+
+    function runStep(sc,i){
+      if(i>=sc.steps.length){
+        var done=document.createElement("div");
+        done.className="scen-done";
+        done.textContent=sc.done;
+        chatEl.appendChild(done);
+        var rs=document.createElement("button");
+        rs.className="fin-restart";rs.textContent="Start this scenario again";
+        rs.onclick=function(){startScenario(current);};
+        chatEl.appendChild(rs);
+        done.scrollIntoView({block:"nearest"});
+        return;
+      }
+      var step=sc.steps[i];
+      var b=bubble("Fin",step.ask);
+
+      if(step.type==="reflect"){
+        var ta=document.createElement("textarea");
+        ta.className="fin-input";ta.placeholder="Type your answer here...";
+        b.querySelector(".say").appendChild(ta);
+        var rev=document.createElement("button");
+        rev.className="fin-opt";rev.textContent="Reveal how Fin would explain it";
+        rev.onclick=function(){
+          rev.disabled=true;
+          bubble("You", ta.value.trim()?escapeHtml(ta.value.trim()):"<em>(thinking it through)</em>", true);
+          bubble("Fin", "<b>A strong answer sounds like this:</b> "+step.sample);
+          runStep(sc,i+1);
+        };
+        b.querySelector(".say").appendChild(rev);
+        return;
+      }
+
+      // choice step
+      var wrap=document.createElement("div");
+      wrap.className="fin-opts";
+      step.opts.forEach(function(o){
+        var btn=document.createElement("button");
+        btn.className="fin-opt";btn.textContent=o.t;
+        btn.onclick=function(){
+          if(o.ok){
+            Array.prototype.forEach.call(wrap.children,function(c){c.disabled=true;});
+            bubble("You", escapeHtml(o.t), true);
+            bubble("Fin", o.say);
+            runStep(sc,i+1);
+          } else {
+            btn.disabled=true;
+            bubble("You", escapeHtml(o.t), true);
+            bubble("Fin", "Almost. "+o.hint+" Have another go.");
+          }
+        };
+        wrap.appendChild(btn);
+      });
+      b.querySelector(".say").appendChild(wrap);
+    }
+
+    function escapeHtml(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML;}
+
+    startScenario(current);
+  })();
+
+
+</script>
+</body>
+</html>
